@@ -1,0 +1,37 @@
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY backend/package*.json ./backend/
+
+# Install dependencies
+RUN npm ci --workspace=backend
+
+# Copy source code
+COPY backend/ ./backend/
+
+# Build application
+RUN npm run build --workspace=backend
+
+# Production stage
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY backend/package*.json ./backend/
+
+# Install production dependencies only
+RUN npm ci --workspace=backend --only=production
+
+# Copy built application from builder
+COPY --from=builder /app/backend/dist ./backend/dist
+
+# Expose port
+EXPOSE 3000
+
+# Start application
+CMD ["node", "backend/dist/main"]
