@@ -100,7 +100,10 @@ export class AdminService {
    * Sync all platforms
    */
   async syncAllPlatforms() {
-    const results = {
+    const results: {
+      teams: { success: boolean; totalMessages?: number; error?: string } | null;
+      slack: { success: boolean; totalMessages?: number; error?: string } | null;
+    } = {
       teams: null,
       slack: null,
     };

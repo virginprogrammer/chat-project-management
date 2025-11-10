@@ -205,7 +205,12 @@ export class TranscriptionService {
 
         // Create push stream from buffer
         const pushStream = sdk.AudioInputStream.createPushStream();
-        pushStream.write(audioBuffer);
+        // Convert Buffer to ArrayBuffer
+        const arrayBuffer = audioBuffer.buffer.slice(
+          audioBuffer.byteOffset,
+          audioBuffer.byteOffset + audioBuffer.byteLength,
+        ) as ArrayBuffer;
+        pushStream.write(arrayBuffer);
         pushStream.close();
 
         const audioConfig = sdk.AudioConfig.fromStreamInput(pushStream);

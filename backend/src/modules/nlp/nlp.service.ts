@@ -5,14 +5,14 @@ import { Queue } from 'bull';
 import { PrismaService } from '../../database/prisma.service';
 import OpenAI from 'openai';
 
-interface ExtractedEntity {
+export interface ExtractedEntity {
   type: string;
   value: string;
   confidence: number;
   metadata?: Record<string, any>;
 }
 
-interface NLPResult {
+export interface NLPResult {
   entities: ExtractedEntity[];
   projects?: string[];
   tasks?: Array<{
@@ -127,6 +127,9 @@ export class NlpService {
       });
 
       const response = completion.choices[0].message.content;
+      if (!response) {
+        throw new Error('No response from OpenAI');
+      }
       const parsed = JSON.parse(response);
 
       return this.normalizeNLPResult(parsed);
@@ -407,7 +410,7 @@ Important:
    * Batch process messages
    */
   async batchProcessMessages(messageIds: string[]) {
-    const results = [];
+    const results: Array<{ messageId: string; success: boolean; error?: string }> = [];
 
     for (const messageId of messageIds) {
       try {
@@ -530,7 +533,11 @@ Keep the summary to 3-5 paragraphs.`;
         response_format: { type: 'json_object' },
       });
 
-      const result = JSON.parse(completion.choices[0].message.content);
+      const content = completion.choices[0].message.content;
+      if (!content) {
+        throw new Error('No response from OpenAI');
+      }
+      const result = JSON.parse(content);
       return result;
     } catch (error) {
       this.logger.error('Sentiment analysis failed', error);

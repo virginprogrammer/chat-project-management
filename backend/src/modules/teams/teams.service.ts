@@ -244,7 +244,7 @@ export class TeamsService {
    * Store messages in database
    */
   async storeMessages(messages: any[], teamId: string, channelId: string, channelName: string) {
-    const storedMessages = [];
+    const storedMessages: any[] = [];
 
     for (const message of messages) {
       try {

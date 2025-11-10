@@ -211,7 +211,7 @@ export class SlackService {
    * Store messages in database
    */
   async storeMessages(messages: any[], channelId: string, channelName: string) {
-    const storedMessages = [];
+    const storedMessages: any[] = [];
 
     for (const message of messages) {
       try {
@@ -270,6 +270,10 @@ export class SlackService {
 
       for (const channel of channels) {
         try {
+          if (!channel.id || !channel.name) {
+            this.logger.warn(`Skipping channel with missing id or name`);
+            continue;
+          }
           const messages = await this.getChannelMessages(channel.id);
           const stored = await this.storeMessages(messages, channel.id, channel.name);
           totalMessages += stored.length;
@@ -351,6 +355,8 @@ export class SlackService {
       const client = await this.getSlackClient();
       const response = await client.search.messages({
         query: query,
+        sort: 'timestamp',
+        sort_dir: 'desc',
       });
 
       return response.messages?.matches || [];

@@ -11,15 +11,23 @@ export class StorageService {
 
   constructor(private configService: ConfigService) {
     // Initialize S3 client
+    const accessKeyId = this.configService.get<string>('AWS_ACCESS_KEY_ID');
+    const secretAccessKey = this.configService.get<string>('AWS_SECRET_ACCESS_KEY');
+    const bucket = this.configService.get<string>('AWS_S3_BUCKET');
+
+    if (!accessKeyId || !secretAccessKey || !bucket) {
+      this.logger.warn('AWS credentials not configured');
+    }
+
     this.s3Client = new S3Client({
-      region: this.configService.get('AWS_REGION') || 'us-east-1',
+      region: this.configService.get<string>('AWS_REGION') || 'us-east-1',
       credentials: {
-        accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+        accessKeyId: accessKeyId || '',
+        secretAccessKey: secretAccessKey || '',
       },
     });
 
-    this.bucket = this.configService.get('AWS_S3_BUCKET');
+    this.bucket = bucket || '';
   }
 
   /**
