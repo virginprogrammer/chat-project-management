@@ -59,8 +59,8 @@ model Message {
   tasks          Task[]
   requirements   Requirement[]
 
+  @@unique([source, sourceId], name: "source_sourceId")
   @@index([projectId])
-  @@index([source, sourceId])
   @@index([timestamp])
   @@map("messages")
 }

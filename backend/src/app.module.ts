@@ -12,6 +12,8 @@ import { TeamsModule } from './modules/teams/teams.module';
 import { SlackModule } from './modules/slack/slack.module';
 import { TranscriptionModule } from './modules/transcription/transcription.module';
 import { NlpModule } from './modules/nlp/nlp.module';
+import { WebhooksModule } from './modules/webhooks/webhooks.module';
+import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
   imports: [
@@ -43,6 +45,8 @@ import { NlpModule } from './modules/nlp/nlp.module';
     SlackModule,
     TranscriptionModule,
     NlpModule,
+    WebhooksModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
