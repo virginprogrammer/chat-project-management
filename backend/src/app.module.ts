@@ -15,6 +15,7 @@ import { TranscriptionModule } from './modules/transcription/transcription.modul
 import { NlpModule } from './modules/nlp/nlp.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { AdminModule } from './modules/admin/admin.module';
     NlpModule,
     WebhooksModule,
     AdminModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
