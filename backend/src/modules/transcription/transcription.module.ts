@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
 import { TranscriptionController } from './transcription.controller';
 import { TranscriptionService } from './transcription.service';
+import { TranscriptionProcessor } from './transcription.processor';
 
 @Module({
   imports: [
@@ -10,7 +11,7 @@ import { TranscriptionService } from './transcription.service';
     }),
   ],
   controllers: [TranscriptionController],
-  providers: [TranscriptionService],
+  providers: [TranscriptionService, TranscriptionProcessor],
   exports: [TranscriptionService],
 })
 export class TranscriptionModule {}

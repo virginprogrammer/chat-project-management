@@ -5,6 +5,7 @@ import { BullModule } from '@nestjs/bull';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
+import { StorageModule } from './common/storage/storage.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { MessagesModule } from './modules/messages/messages.module';
@@ -36,6 +37,9 @@ import { AdminModule } from './modules/admin/admin.module';
 
     // Database
     DatabaseModule,
+
+    // Common modules
+    StorageModule,
 
     // Feature modules
     AuthModule,
