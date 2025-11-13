@@ -304,10 +304,7 @@ export class TeamsService {
             totalMessages += stored.length;
             this.logger.log(`Synced ${stored.length} messages from ${channel.displayName}`);
           } catch (error) {
-            this.logger.error(
-              `Failed to sync messages from channel ${channel.displayName}`,
-              error,
-            );
+            this.logger.error(`Failed to sync messages from channel ${channel.displayName}`, error);
           }
         }
       }

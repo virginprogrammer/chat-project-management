@@ -89,8 +89,7 @@ export class AnalyticsService {
           totalTasks,
           totalRequirements,
           completedTasks,
-          taskCompletionRate:
-            totalTasks > 0 ? ((completedTasks / totalTasks) * 100).toFixed(2) : 0,
+          taskCompletionRate: totalTasks > 0 ? ((completedTasks / totalTasks) * 100).toFixed(2) : 0,
         },
         messagesBySource,
         tasksByStatus: tasksGrouped,
@@ -184,59 +183,54 @@ export class AnalyticsService {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);
 
-      const [
-        messageActivity,
-        taskActivity,
-        contributorStats,
-        channelActivity,
-        dailyActivity,
-      ] = await Promise.all([
-        this.prisma.message.count({
-          where: {
-            timestamp: {
-              gte: startDate,
+      const [messageActivity, taskActivity, contributorStats, channelActivity, dailyActivity] =
+        await Promise.all([
+          this.prisma.message.count({
+            where: {
+              timestamp: {
+                gte: startDate,
+              },
             },
-          },
-        }),
-        this.prisma.task.count({
-          where: {
-            createdAt: {
-              gte: startDate,
+          }),
+          this.prisma.task.count({
+            where: {
+              createdAt: {
+                gte: startDate,
+              },
             },
-          },
-        }),
-        this.prisma.message.groupBy({
-          by: ['authorName'],
-          where: {
-            timestamp: {
-              gte: startDate,
+          }),
+          this.prisma.message.groupBy({
+            by: ['authorName'],
+            where: {
+              timestamp: {
+                gte: startDate,
+              },
             },
-          },
-          _count: true,
-          orderBy: {
-            _count: {
-              authorName: 'desc',
+            _count: true,
+            orderBy: {
+              _count: {
+                authorName: 'desc',
+              },
             },
-          },
-          take: 15,
-        }),
-        this.prisma.message.groupBy({
-          by: ['channelName', 'source'],
-          where: {
-            timestamp: {
-              gte: startDate,
+            take: 15,
+          }),
+          this.prisma.message.groupBy({
+            by: ['channelName', 'source'],
+            where: {
+              timestamp: {
+                gte: startDate,
+              },
             },
-          },
-          _count: true,
-          orderBy: {
-            _count: {
-              channelName: 'desc',
+            _count: true,
+            orderBy: {
+              _count: {
+                channelName: 'desc',
+              },
             },
-          },
-          take: 15,
-        }),
-        // Get messages grouped by day
-        this.prisma.$queryRaw`
+            take: 15,
+          }),
+          // Get messages grouped by day
+          this.prisma.$queryRaw`
           SELECT
             DATE(timestamp) as date,
             COUNT(*) as count,
@@ -246,7 +240,7 @@ export class AnalyticsService {
           GROUP BY DATE(timestamp), source
           ORDER BY date DESC
         `,
-      ]);
+        ]);
 
       return {
         period: {

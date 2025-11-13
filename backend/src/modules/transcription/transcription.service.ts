@@ -220,7 +220,7 @@ export class TranscriptionService {
         let totalConfidence = 0;
         let recognitionCount = 0;
 
-        recognizer.recognized = (s, e) => {
+        recognizer.recognized = (_s, e) => {
           if (e.result.reason === sdk.ResultReason.RecognizedSpeech) {
             fullText += e.result.text + ' ';
 
@@ -238,13 +238,13 @@ export class TranscriptionService {
           }
         };
 
-        recognizer.canceled = (s, e) => {
+        recognizer.canceled = (_s, e) => {
           this.logger.error(`Recognition canceled: ${e.errorDetails}`);
           recognizer.stopContinuousRecognitionAsync();
           reject(new Error(`Recognition canceled: ${e.errorDetails}`));
         };
 
-        recognizer.sessionStopped = (s, e) => {
+        recognizer.sessionStopped = (_s, _e) => {
           recognizer.stopContinuousRecognitionAsync();
 
           const avgConfidence = recognitionCount > 0 ? totalConfidence / recognitionCount : 0.5;
@@ -342,7 +342,12 @@ export class TranscriptionService {
     }
 
     // Get job from queue
-    const jobs = await this.transcriptionQueue.getJobs(['waiting', 'active', 'completed', 'failed']);
+    const jobs = await this.transcriptionQueue.getJobs([
+      'waiting',
+      'active',
+      'completed',
+      'failed',
+    ]);
     const job = jobs.find((j) => j.data.recordingId === recordingId);
 
     return {

@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Query, Post, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { TeamsService } from './teams.service';
 
@@ -124,10 +124,7 @@ export class TeamsController {
 
   @Post(':teamId/channels/:channelId/subscribe')
   @ApiOperation({ summary: 'Create webhook subscription for a channel' })
-  async createSubscription(
-    @Param('teamId') teamId: string,
-    @Param('channelId') channelId: string,
-  ) {
+  async createSubscription(@Param('teamId') teamId: string, @Param('channelId') channelId: string) {
     try {
       const subscription = await this.teamsService.createWebhookSubscription(teamId, channelId);
       return {
