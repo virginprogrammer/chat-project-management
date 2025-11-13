@@ -70,10 +70,7 @@ export class SlackController {
   @Get('channels/:channelId/messages')
   @ApiOperation({ summary: 'Get messages from a channel' })
   @ApiQuery({ name: 'limit', required: false })
-  async getChannelMessages(
-    @Param('channelId') channelId: string,
-    @Query('limit') limit?: number,
-  ) {
+  async getChannelMessages(@Param('channelId') channelId: string, @Query('limit') limit?: number) {
     try {
       const messages = await this.slackService.getChannelMessages(channelId, limit);
       return { messages };

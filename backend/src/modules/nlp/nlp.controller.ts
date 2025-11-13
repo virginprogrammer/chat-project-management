@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Param,
-  Body,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiBody } from '@nestjs/swagger';
 import { NlpService } from './nlp.service';
 
@@ -113,10 +106,7 @@ export class NlpController {
   @Get('entities/project/:projectId')
   @ApiOperation({ summary: 'Get all entities for a project' })
   @ApiQuery({ name: 'type', required: false, description: 'Filter by entity type' })
-  async getProjectEntities(
-    @Param('projectId') projectId: string,
-    @Query('type') type?: string,
-  ) {
+  async getProjectEntities(@Param('projectId') projectId: string, @Query('type') type?: string) {
     try {
       const entities = await this.nlpService.getEntitiesByProject(projectId, type);
       return {

@@ -313,6 +313,11 @@ export class SlackService {
   async downloadFile(fileUrl: string, privateUrl?: string): Promise<Buffer> {
     try {
       const integration = await this.getActiveIntegration();
+
+      if (!integration) {
+        throw new Error('No active Slack integration found');
+      }
+
       const urlToFetch = privateUrl || fileUrl;
 
       const response = await fetch(urlToFetch, {

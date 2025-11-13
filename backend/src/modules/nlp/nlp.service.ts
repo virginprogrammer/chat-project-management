@@ -114,7 +114,8 @@ export class NlpService {
         messages: [
           {
             role: 'system',
-            content: 'You are an expert at extracting project management information from conversations. Extract tasks, requirements, deadlines, project names, decisions, and other relevant information.',
+            content:
+              'You are an expert at extracting project management information from conversations. Extract tasks, requirements, deadlines, project names, decisions, and other relevant information.',
           },
           {
             role: 'user',
@@ -461,9 +462,7 @@ Important:
       }
 
       // Build context from messages
-      const context = project.messages
-        .map((m) => `[${m.authorName}]: ${m.content}`)
-        .join('\n\n');
+      const context = project.messages.map((m) => `[${m.authorName}]: ${m.content}`).join('\n\n');
 
       const prompt = `Based on the following project information, provide a concise summary:
 
@@ -489,7 +488,8 @@ Keep the summary to 3-5 paragraphs.`;
         messages: [
           {
             role: 'system',
-            content: 'You are a project management assistant that creates clear, concise project summaries.',
+            content:
+              'You are a project management assistant that creates clear, concise project summaries.',
           },
           {
             role: 'user',
@@ -521,7 +521,8 @@ Keep the summary to 3-5 paragraphs.`;
         messages: [
           {
             role: 'system',
-            content: 'Analyze the sentiment of the text. Respond with JSON: {"sentiment": "positive|negative|neutral", "score": 0.0-1.0}',
+            content:
+              'Analyze the sentiment of the text. Respond with JSON: {"sentiment": "positive|negative|neutral", "score": 0.0-1.0}',
           },
           {
             role: 'user',
@@ -555,7 +556,7 @@ Keep the summary to 3-5 paragraphs.`;
           messageId,
         },
         orderBy: {
-          confidence: 'desc',
+          confidenceScore: 'desc',
         },
       });
     } catch (error) {
@@ -581,10 +582,7 @@ Keep the summary to 3-5 paragraphs.`;
 
       return await this.prisma.entity.findMany({
         where: whereClause,
-        orderBy: [
-          { confidence: 'desc' },
-          { extractedAt: 'desc' },
-        ],
+        orderBy: [{ confidenceScore: 'desc' }, { createdAt: 'desc' }],
         include: {
           message: {
             select: {
