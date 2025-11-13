@@ -155,7 +155,11 @@ export class TranscriptionService {
       }
 
       // Download audio file
-      const storageKey = this.extractStorageKey(recording.storagePath || recording.fileUrl);
+      const filePath = recording.storagePath || recording.fileUrl;
+      if (!filePath) {
+        throw new Error(`No file path found for recording: ${recordingId}`);
+      }
+      const storageKey = this.extractStorageKey(filePath);
       const audioBuffer = await this.storageService.downloadFile(storageKey);
 
       // Transcribe audio

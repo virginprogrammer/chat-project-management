@@ -556,7 +556,7 @@ Keep the summary to 3-5 paragraphs.`;
           messageId,
         },
         orderBy: {
-          confidence: 'desc',
+          confidenceScore: 'desc',
         },
       });
     } catch (error) {
@@ -582,7 +582,7 @@ Keep the summary to 3-5 paragraphs.`;
 
       return await this.prisma.entity.findMany({
         where: whereClause,
-        orderBy: [{ confidence: 'desc' }, { extractedAt: 'desc' }],
+        orderBy: [{ confidenceScore: 'desc' }, { createdAt: 'desc' }],
         include: {
           message: {
             select: {

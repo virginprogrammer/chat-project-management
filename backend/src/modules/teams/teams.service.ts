@@ -175,6 +175,9 @@ export class TeamsService {
 
     // Check if token needs refresh
     if (new Date() > new Date(integration.expiresAt.getTime() - 5 * 60 * 1000)) {
+      if (!integration.refreshToken) {
+        throw new Error('No refresh token available for Teams integration');
+      }
       const tokenResponse = await this.refreshAccessToken(integration.refreshToken);
       await this.prisma.integration.update({
         where: { id: integration.id },
@@ -351,6 +354,11 @@ export class TeamsService {
   async downloadRecordingFile(fileUrl: string): Promise<Buffer> {
     try {
       const integration = await this.getActiveIntegration();
+
+      if (!integration) {
+        throw new Error('No active Teams integration found');
+      }
+
       const response = await fetch(fileUrl, {
         headers: {
           Authorization: `Bearer ${integration.accessToken}`,
