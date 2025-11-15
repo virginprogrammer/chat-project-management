@@ -80,6 +80,31 @@ jobs:
           REDIS_PORT: 6379
           JWT_SECRET: test-secret
 
+      - name: Run backend e2e tests
+        working-directory: backend
+        run: npm run test:e2e
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/teams_slack_pm_test
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          REDIS_DB: 1
+          JWT_SECRET: test-secret-e2e
+          TEAMS_CLIENT_ID: test-teams-client-id
+          TEAMS_CLIENT_SECRET: test-teams-client-secret
+          TEAMS_REDIRECT_URI: http://localhost:3000/api/auth/teams/callback
+          SLACK_CLIENT_ID: test-slack-client-id
+          SLACK_CLIENT_SECRET: test-slack-client-secret
+          SLACK_REDIRECT_URI: http://localhost:3000/api/auth/slack/callback
+          AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: test-access-key
+          AWS_SECRET_ACCESS_KEY: test-secret-key
+          S3_BUCKET: test-chat-pm-recordings
+          AZURE_SPEECH_KEY: test-azure-speech-key
+          AZURE_SPEECH_REGION: eastus
+          OPENAI_API_KEY: test-openai-api-key
+          OPENAI_MODEL: gpt-4
+          PORT: 3001
+
   frontend-test:
     name: Frontend Tests
     runs-on: ubuntu-latest
