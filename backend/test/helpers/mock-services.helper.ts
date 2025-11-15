@@ -90,14 +90,11 @@ export class MockSlackAPI {
    * Mock conversations.history endpoint
    */
   mockConversationsHistory(channelId: string, messages: any[]) {
-    this.scope
-      .get('/api/conversations.history')
-      .query((query) => query.channel === channelId)
-      .reply(200, {
-        ok: true,
-        messages,
-        has_more: false,
-      });
+    this.scope.post('/api/conversations.history').reply(200, {
+      ok: true,
+      messages,
+      has_more: false,
+    });
 
     return this;
   }
@@ -106,7 +103,7 @@ export class MockSlackAPI {
    * Mock conversations.list endpoint
    */
   mockConversationsList(channels: any[]) {
-    this.scope.get('/api/conversations.list').query(true).reply(200, {
+    this.scope.post('/api/conversations.list').reply(200, {
       ok: true,
       channels,
     });
@@ -118,13 +115,10 @@ export class MockSlackAPI {
    * Mock users.info endpoint
    */
   mockUsersInfo(userId: string, user: any) {
-    this.scope
-      .get('/api/users.info')
-      .query((query) => query.user === userId)
-      .reply(200, {
-        ok: true,
-        user,
-      });
+    this.scope.post('/api/users.info').reply(200, {
+      ok: true,
+      user,
+    });
 
     return this;
   }
@@ -133,7 +127,7 @@ export class MockSlackAPI {
    * Mock files.list endpoint
    */
   mockFilesList(files: any[]) {
-    this.scope.get('/api/files.list').query(true).reply(200, {
+    this.scope.post('/api/files.list').reply(200, {
       ok: true,
       files,
     });
