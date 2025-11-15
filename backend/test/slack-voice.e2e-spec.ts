@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
+import { TranscriptionService } from '../src/modules/transcription/transcription.service';
 import {
   setupTestDatabase,
   teardownTestDatabase,
@@ -39,7 +40,7 @@ describe('Slack Voice/Recordings E2E', () => {
     await app.init();
 
     // Get transcription service for manual processing
-    transcriptionService = moduleFixture.get('TranscriptionService');
+    transcriptionService = moduleFixture.get(TranscriptionService);
 
     // Create test user and integration
     const user = await createTestUser({
