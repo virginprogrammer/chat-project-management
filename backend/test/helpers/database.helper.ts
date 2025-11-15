@@ -63,14 +63,13 @@ export async function createTeamsIntegration(userId: string) {
   return prisma.integration.create({
     data: {
       userId,
-      platform: 'TEAMS',
+      platform: 'teams',
       accessToken: 'mock-teams-access-token',
       refreshToken: 'mock-teams-refresh-token',
       expiresAt: new Date(Date.now() + 3600000), // 1 hour from now
-      metadata: {
-        tenantId: 'mock-tenant-id',
-        scope: 'https://graph.microsoft.com/.default',
-      },
+      workspaceId: 'mock-tenant-id',
+      workspaceName: 'Test Teams Workspace',
+      isActive: true,
     },
   });
 }
@@ -84,15 +83,13 @@ export async function createSlackIntegration(userId: string) {
   return prisma.integration.create({
     data: {
       userId,
-      platform: 'SLACK',
+      platform: 'slack',
       accessToken: 'mock-slack-access-token',
       refreshToken: 'mock-slack-refresh-token',
       expiresAt: new Date(Date.now() + 3600000),
-      metadata: {
-        teamId: 'T12345678',
-        teamName: 'Test Workspace',
-        scope: 'channels:history,channels:read,files:read',
-      },
+      workspaceId: 'T12345678',
+      workspaceName: 'Test Slack Workspace',
+      isActive: true,
     },
   });
 }
@@ -103,7 +100,7 @@ export async function createSlackIntegration(userId: string) {
 export async function createTestProject(data?: {
   name?: string;
   description?: string;
-  status?: 'ACTIVE' | 'COMPLETED' | 'ON_HOLD';
+  status?: string;
 }) {
   const prisma = getPrismaClient();
 
@@ -111,7 +108,7 @@ export async function createTestProject(data?: {
     data: {
       name: data?.name || 'Test Project',
       description: data?.description || 'A test project for e2e testing',
-      status: data?.status || 'ACTIVE',
+      status: data?.status || 'planning',
     },
   });
 }
