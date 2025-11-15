@@ -22,8 +22,10 @@ export const mockSlackAudioFiles = [
     public_url_shared: false,
     display_as_bot: false,
     username: '',
-    url_private: 'https://files.slack.com/files-pri/T12345678-F12345ABCD/team-standup-recording.mp3',
-    url_private_download: 'https://files.slack.com/files-pri/T12345678-F12345ABCD/download/team-standup-recording.mp3',
+    url_private:
+      'https://files.slack.com/files-pri/T12345678-F12345ABCD/team-standup-recording.mp3',
+    url_private_download:
+      'https://files.slack.com/files-pri/T12345678-F12345ABCD/download/team-standup-recording.mp3',
     permalink: 'https://workspace.slack.com/files/U12345678/F12345ABCD/team-standup-recording.mp3',
     permalink_public: '',
     channels: ['C23456789'],
@@ -51,7 +53,8 @@ export const mockSlackAudioFiles = [
     display_as_bot: false,
     username: '',
     url_private: 'https://files.slack.com/files-pri/T12345678-F67890WXYZ/client-meeting-audio.mp3',
-    url_private_download: 'https://files.slack.com/files-pri/T12345678-F67890WXYZ/download/client-meeting-audio.mp3',
+    url_private_download:
+      'https://files.slack.com/files-pri/T12345678-F67890WXYZ/download/client-meeting-audio.mp3',
     permalink: 'https://workspace.slack.com/files/U87654321/F67890WXYZ/client-meeting-audio.mp3',
     permalink_public: '',
     channels: ['C23456789'],
@@ -100,16 +103,24 @@ export function getMockMP3Buffer(): Buffer {
   // Minimal MP3 file with ID3v2 header + one silent frame
   const header = Buffer.from([
     // ID3v2 header
-    0x49, 0x44, 0x33, // "ID3"
-    0x03, 0x00, // version
+    0x49,
+    0x44,
+    0x33, // "ID3"
+    0x03,
+    0x00, // version
     0x00, // flags
-    0x00, 0x00, 0x00, 0x00, // size (syncsafe integer)
+    0x00,
+    0x00,
+    0x00,
+    0x00, // size (syncsafe integer)
   ]);
 
   // Minimal MP3 frame (silent)
   const frame = Buffer.from([
-    0xff, 0xfb, // sync word + MPEG version + Layer
-    0x90, 0x00, // bitrate + sample rate + padding
+    0xff,
+    0xfb, // sync word + MPEG version + Layer
+    0x90,
+    0x00, // bitrate + sample rate + padding
     // Additional padding to make it a valid frame
     ...new Array(100).fill(0x00),
   ]);

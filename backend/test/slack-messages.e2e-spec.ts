@@ -67,10 +67,7 @@ describe('Slack Messages E2E', () => {
       // Mock Slack API responses
       mockSlackApi
         .mockConversationsList(mockSlackChannels)
-        .mockConversationsHistory(
-          mockSlackChannels[0].id,
-          mockSlackMessages,
-        );
+        .mockConversationsHistory(mockSlackChannels[0].id, mockSlackMessages);
 
       // Mock user info requests
       mockSlackMessages.forEach((msg: any) => {
@@ -99,9 +96,7 @@ describe('Slack Messages E2E', () => {
       expect(messagesInDb.length).toBe(mockSlackMessages.length);
 
       // Verify message content
-      const firstMessage = messagesInDb.find(
-        (m) => m.sourceId === mockSlackMessages[0].ts,
-      );
+      const firstMessage = messagesInDb.find((m) => m.sourceId === mockSlackMessages[0].ts);
       expect(firstMessage).toBeDefined();
       expect(firstMessage?.content).toContain('Project Beta');
       expect(firstMessage?.authorName).toBe('Alice Johnson');
@@ -112,10 +107,7 @@ describe('Slack Messages E2E', () => {
       // Mock Slack API responses
       mockSlackApi
         .mockConversationsList(mockSlackChannels)
-        .mockConversationsHistory(
-          mockSlackChannels[0].id,
-          mockSlackMessages,
-        );
+        .mockConversationsHistory(mockSlackChannels[0].id, mockSlackMessages);
 
       // Mock user info
       mockSlackMessages.forEach((msg: any) => {
@@ -141,10 +133,7 @@ describe('Slack Messages E2E', () => {
       mockSlackApi = new MockSlackAPI();
       mockSlackApi
         .mockConversationsList(mockSlackChannels)
-        .mockConversationsHistory(
-          mockSlackChannels[0].id,
-          mockSlackMessages,
-        );
+        .mockConversationsHistory(mockSlackChannels[0].id, mockSlackMessages);
 
       mockSlackMessages.forEach((msg: any) => {
         const user = mockSlackUsers.find((u) => u.id === msg.user);
@@ -182,10 +171,7 @@ describe('Slack Messages E2E', () => {
 
       mockSlackApi
         .mockConversationsList(mockSlackChannels)
-        .mockConversationsHistory(
-          mockSlackChannels[0].id,
-          messagesWithBots,
-        );
+        .mockConversationsHistory(mockSlackChannels[0].id, messagesWithBots);
 
       mockSlackMessages.forEach((msg: any) => {
         const user = mockSlackUsers.find((u) => u.id === msg.user);
@@ -214,10 +200,7 @@ describe('Slack Messages E2E', () => {
       // Setup: Sync Slack messages
       mockSlackApi
         .mockConversationsList(mockSlackChannels)
-        .mockConversationsHistory(
-          mockSlackChannels[0].id,
-          mockSlackMessages,
-        );
+        .mockConversationsHistory(mockSlackChannels[0].id, mockSlackMessages);
 
       mockSlackMessages.forEach((msg: any) => {
         const user = mockSlackUsers.find((u) => u.id === msg.user);
@@ -241,9 +224,7 @@ describe('Slack Messages E2E', () => {
       expect(response.body.length).toBeGreaterThan(0);
 
       // Verify Slack messages are present
-      const slackMessages = response.body.filter(
-        (msg: any) => msg.source === 'slack',
-      );
+      const slackMessages = response.body.filter((msg: any) => msg.source === 'slack');
       expect(slackMessages.length).toBe(mockSlackMessages.length);
     });
 
@@ -299,10 +280,7 @@ describe('Slack Messages E2E', () => {
       // Setup: Sync Slack messages
       mockSlackApi
         .mockConversationsList(mockSlackChannels)
-        .mockConversationsHistory(
-          mockSlackChannels[0].id,
-          mockSlackMessages,
-        );
+        .mockConversationsHistory(mockSlackChannels[0].id, mockSlackMessages);
 
       mockSlackMessages.forEach((msg: any) => {
         const user = mockSlackUsers.find((u) => u.id === msg.user);
@@ -333,10 +311,7 @@ describe('Slack Messages E2E', () => {
       // Setup: Sync Slack messages
       mockSlackApi
         .mockConversationsList(mockSlackChannels)
-        .mockConversationsHistory(
-          mockSlackChannels[0].id,
-          mockSlackMessages,
-        );
+        .mockConversationsHistory(mockSlackChannels[0].id, mockSlackMessages);
 
       mockSlackMessages.forEach((msg: any) => {
         const user = mockSlackUsers.find((u) => u.id === msg.user);
@@ -358,9 +333,7 @@ describe('Slack Messages E2E', () => {
         .expect(200);
 
       // Verify unprocessed Slack messages are visible
-      const slackMessages = messagesResponse.body.filter(
-        (msg: any) => msg.source === 'slack',
-      );
+      const slackMessages = messagesResponse.body.filter((msg: any) => msg.source === 'slack');
 
       expect(slackMessages.length).toBeGreaterThan(0);
 
@@ -380,9 +353,7 @@ describe('Slack Messages E2E', () => {
         .expect(200);
 
       expect(statsResponse.body.messages.slack).toBe(mockSlackMessages.length);
-      expect(statsResponse.body.messages.total).toBeGreaterThanOrEqual(
-        mockSlackMessages.length,
-      );
+      expect(statsResponse.body.messages.total).toBeGreaterThanOrEqual(mockSlackMessages.length);
     });
 
     it('should verify Slack messages can be searched', async () => {
@@ -396,9 +367,7 @@ describe('Slack Messages E2E', () => {
 
       // Should find messages containing "dashboard"
       const foundMessages = searchResponse.body.filter(
-        (msg: any) =>
-          msg.content.toLowerCase().includes('dashboard') &&
-          msg.source === 'slack',
+        (msg: any) => msg.content.toLowerCase().includes('dashboard') && msg.source === 'slack',
       );
 
       expect(foundMessages.length).toBeGreaterThan(0);

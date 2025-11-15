@@ -39,7 +39,8 @@ export const mockTeamsMessages = [
     importance: 'normal',
     body: {
       contentType: 'html',
-      content: '<p>We need to implement the user authentication feature for Project Alpha by next week.</p>',
+      content:
+        '<p>We need to implement the user authentication feature for Project Alpha by next week.</p>',
     },
     from: {
       user: {
@@ -62,7 +63,8 @@ export const mockTeamsMessages = [
     importance: 'normal',
     body: {
       contentType: 'html',
-      content: '<p>The database schema for Project Alpha has been finalized. We can start development.</p>',
+      content:
+        '<p>The database schema for Project Alpha has been finalized. We can start development.</p>',
     },
     from: {
       user: {
@@ -85,7 +87,8 @@ export const mockTeamsMessages = [
     importance: 'high',
     body: {
       contentType: 'html',
-      content: '<p>Task: Create API endpoints for user registration and login. Assigned to @John Doe. Due: Jan 15.</p>',
+      content:
+        '<p>Task: Create API endpoints for user registration and login. Assigned to @John Doe. Due: Jan 15.</p>',
     },
     from: {
       user: {
@@ -119,7 +122,8 @@ export const mockTeamsMessages = [
     importance: 'normal',
     body: {
       contentType: 'html',
-      content: '<p>Meeting notes from Project Alpha standup: All tasks are on track. Frontend integration will start next Monday.</p>',
+      content:
+        '<p>Meeting notes from Project Alpha standup: All tasks are on track. Frontend integration will start next Monday.</p>',
     },
     from: {
       user: {

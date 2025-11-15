@@ -31,9 +31,7 @@ export class ApiClient {
    * Make a POST request
    */
   async post(path: string, body?: any) {
-    const req = request(this.app.getHttpServer())
-      .post(path)
-      .send(body);
+    const req = request(this.app.getHttpServer()).post(path).send(body);
 
     if (this.authToken) {
       req.set('Authorization', `Bearer ${this.authToken}`);
@@ -46,9 +44,7 @@ export class ApiClient {
    * Make a PUT request
    */
   async put(path: string, body?: any) {
-    const req = request(this.app.getHttpServer())
-      .put(path)
-      .send(body);
+    const req = request(this.app.getHttpServer()).put(path).send(body);
 
     if (this.authToken) {
       req.set('Authorization', `Bearer ${this.authToken}`);

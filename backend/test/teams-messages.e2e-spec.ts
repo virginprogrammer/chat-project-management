@@ -11,11 +11,7 @@ import {
 } from './helpers/database.helper';
 import { generateTestToken } from './helpers/auth.helper';
 import { MockTeamsAPI } from './helpers/mock-services.helper';
-import {
-  mockTeams,
-  mockChannels,
-  mockTeamsMessages,
-} from './fixtures/teams-messages.fixture';
+import { mockTeams, mockChannels, mockTeamsMessages } from './fixtures/teams-messages.fixture';
 
 describe('Teams Messages E2E', () => {
   let app: INestApplication;
@@ -68,11 +64,7 @@ describe('Teams Messages E2E', () => {
       mockTeamsApi
         .mockGetTeams(mockTeams)
         .mockGetChannels(mockTeams[0].id, mockChannels)
-        .mockGetChannelMessages(
-          mockTeams[0].id,
-          mockChannels[0].id,
-          mockTeamsMessages,
-        );
+        .mockGetChannelMessages(mockTeams[0].id, mockChannels[0].id, mockTeamsMessages);
 
       // Trigger Teams sync
       const syncResponse = await request(app.getHttpServer())
@@ -93,9 +85,7 @@ describe('Teams Messages E2E', () => {
       expect(messagesInDb.length).toBe(mockTeamsMessages.length);
 
       // Verify message content
-      const firstMessage = messagesInDb.find(
-        (m) => m.sourceId === mockTeamsMessages[0].id,
-      );
+      const firstMessage = messagesInDb.find((m) => m.sourceId === mockTeamsMessages[0].id);
       expect(firstMessage).toBeDefined();
       expect(firstMessage?.content).toContain('user authentication');
       expect(firstMessage?.authorName).toBe('John Doe');
@@ -107,11 +97,7 @@ describe('Teams Messages E2E', () => {
       mockTeamsApi
         .mockGetTeams(mockTeams)
         .mockGetChannels(mockTeams[0].id, mockChannels)
-        .mockGetChannelMessages(
-          mockTeams[0].id,
-          mockChannels[0].id,
-          mockTeamsMessages,
-        );
+        .mockGetChannelMessages(mockTeams[0].id, mockChannels[0].id, mockTeamsMessages);
 
       // First sync
       await request(app.getHttpServer())
@@ -130,11 +116,7 @@ describe('Teams Messages E2E', () => {
       mockTeamsApi
         .mockGetTeams(mockTeams)
         .mockGetChannels(mockTeams[0].id, mockChannels)
-        .mockGetChannelMessages(
-          mockTeams[0].id,
-          mockChannels[0].id,
-          mockTeamsMessages,
-        );
+        .mockGetChannelMessages(mockTeams[0].id, mockChannels[0].id, mockTeamsMessages);
 
       // Second sync
       await request(app.getHttpServer())
@@ -157,11 +139,7 @@ describe('Teams Messages E2E', () => {
       mockTeamsApi
         .mockGetTeams(mockTeams)
         .mockGetChannels(mockTeams[0].id, mockChannels)
-        .mockGetChannelMessages(
-          mockTeams[0].id,
-          mockChannels[0].id,
-          mockTeamsMessages,
-        );
+        .mockGetChannelMessages(mockTeams[0].id, mockChannels[0].id, mockTeamsMessages);
 
       await request(app.getHttpServer())
         .post('/admin/sync/teams')
@@ -178,9 +156,7 @@ describe('Teams Messages E2E', () => {
       expect(response.body.length).toBeGreaterThan(0);
 
       // Verify Teams messages are present
-      const teamsMessages = response.body.filter(
-        (msg: any) => msg.source === 'teams',
-      );
+      const teamsMessages = response.body.filter((msg: any) => msg.source === 'teams');
       expect(teamsMessages.length).toBe(mockTeamsMessages.length);
     });
 
@@ -240,11 +216,7 @@ describe('Teams Messages E2E', () => {
       mockTeamsApi
         .mockGetTeams(mockTeams)
         .mockGetChannels(mockTeams[0].id, mockChannels)
-        .mockGetChannelMessages(
-          mockTeams[0].id,
-          mockChannels[0].id,
-          mockTeamsMessages,
-        );
+        .mockGetChannelMessages(mockTeams[0].id, mockChannels[0].id, mockTeamsMessages);
 
       await request(app.getHttpServer())
         .post('/admin/sync/teams')
@@ -269,11 +241,7 @@ describe('Teams Messages E2E', () => {
       mockTeamsApi
         .mockGetTeams(mockTeams)
         .mockGetChannels(mockTeams[0].id, mockChannels)
-        .mockGetChannelMessages(
-          mockTeams[0].id,
-          mockChannels[0].id,
-          mockTeamsMessages,
-        );
+        .mockGetChannelMessages(mockTeams[0].id, mockChannels[0].id, mockTeamsMessages);
 
       await request(app.getHttpServer())
         .post('/admin/sync/teams')
@@ -288,9 +256,7 @@ describe('Teams Messages E2E', () => {
         .expect(200);
 
       // Verify unprocessed Teams messages are visible
-      const teamsMessages = messagesResponse.body.filter(
-        (msg: any) => msg.source === 'teams',
-      );
+      const teamsMessages = messagesResponse.body.filter((msg: any) => msg.source === 'teams');
 
       expect(teamsMessages.length).toBeGreaterThan(0);
 
@@ -310,9 +276,7 @@ describe('Teams Messages E2E', () => {
         .expect(200);
 
       expect(statsResponse.body.messages.teams).toBe(mockTeamsMessages.length);
-      expect(statsResponse.body.messages.total).toBeGreaterThanOrEqual(
-        mockTeamsMessages.length,
-      );
+      expect(statsResponse.body.messages.total).toBeGreaterThanOrEqual(mockTeamsMessages.length);
     });
 
     it('should verify Teams messages can be searched', async () => {
@@ -327,8 +291,7 @@ describe('Teams Messages E2E', () => {
       // Should find messages containing "authentication"
       const foundMessages = searchResponse.body.filter(
         (msg: any) =>
-          msg.content.toLowerCase().includes('authentication') &&
-          msg.source === 'teams',
+          msg.content.toLowerCase().includes('authentication') && msg.source === 'teams',
       );
 
       expect(foundMessages.length).toBeGreaterThan(0);

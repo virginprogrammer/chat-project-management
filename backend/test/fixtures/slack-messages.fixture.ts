@@ -99,7 +99,7 @@ export const mockSlackMessages = [
   {
     type: 'message',
     user: 'U87654321',
-    text: 'Great! I\'ve reviewed the design mockups. They look solid. When are we planning to start development?',
+    text: "Great! I've reviewed the design mockups. They look solid. When are we planning to start development?",
     ts: '1736514000.000200',
     team: 'T12345678',
     channel: 'C23456789',
@@ -117,7 +117,7 @@ export const mockSlackMessages = [
   {
     type: 'message',
     user: 'U11111111',
-    text: 'Sounds good! I\'ll work on the user authentication endpoints first. Target completion: Jan 20.',
+    text: "Sounds good! I'll work on the user authentication endpoints first. Target completion: Jan 20.",
     ts: '1736521200.000400',
     team: 'T12345678',
     channel: 'C23456789',

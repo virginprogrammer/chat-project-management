@@ -170,13 +170,11 @@ describe('Slack Voice/Recordings E2E', () => {
 
     it('should process Slack audio transcription and store result', async () => {
       // Mock the transcribeAudio method
-      jest
-        .spyOn(transcriptionService as any, 'transcribeAudio')
-        .mockResolvedValue({
-          text: mockSlackRecording001Transcription,
-          language: 'en-US',
-          confidence: 0.92,
-        });
+      jest.spyOn(transcriptionService as any, 'transcribeAudio').mockResolvedValue({
+        text: mockSlackRecording001Transcription,
+        language: 'en-US',
+        confidence: 0.92,
+      });
 
       // Manually trigger transcription processing
       await transcriptionService.processTranscription(recordingId);
@@ -207,9 +205,7 @@ describe('Slack Voice/Recordings E2E', () => {
         .mockRejectedValue(new Error('Transcription service unavailable'));
 
       // Attempt transcription
-      await expect(
-        transcriptionService.processTranscription(recordingId),
-      ).rejects.toThrow();
+      await expect(transcriptionService.processTranscription(recordingId)).rejects.toThrow();
 
       // Verify recording status is failed
       const prisma = getPrismaClient();
@@ -246,9 +242,7 @@ describe('Slack Voice/Recordings E2E', () => {
       expect(response.body.recordings).toBeDefined();
       expect(Array.isArray(response.body.recordings)).toBe(true);
 
-      const slackRecordings = response.body.recordings.filter(
-        (rec: any) => rec.source === 'slack',
-      );
+      const slackRecordings = response.body.recordings.filter((rec: any) => rec.source === 'slack');
 
       expect(slackRecordings.length).toBe(mockSlackAudioFiles.length);
     });
@@ -287,13 +281,11 @@ describe('Slack Voice/Recordings E2E', () => {
 
     it('should retrieve specific Slack recording with transcription', async () => {
       // Mock and process transcription
-      jest
-        .spyOn(transcriptionService as any, 'transcribeAudio')
-        .mockResolvedValue({
-          text: mockSlackRecording001Transcription,
-          language: 'en-US',
-          confidence: 0.93,
-        });
+      jest.spyOn(transcriptionService as any, 'transcribeAudio').mockResolvedValue({
+        text: mockSlackRecording001Transcription,
+        language: 'en-US',
+        confidence: 0.93,
+      });
 
       await transcriptionService.processTranscription(recordingId);
 
@@ -327,17 +319,13 @@ describe('Slack Voice/Recordings E2E', () => {
 
         // Mock and process transcription
         const transcriptionText =
-          index === 0
-            ? mockSlackRecording001Transcription
-            : mockSlackRecording002Transcription;
+          index === 0 ? mockSlackRecording001Transcription : mockSlackRecording002Transcription;
 
-        jest
-          .spyOn(transcriptionService as any, 'transcribeAudio')
-          .mockResolvedValue({
-            text: transcriptionText,
-            language: 'en-US',
-            confidence: 0.88,
-          });
+        jest.spyOn(transcriptionService as any, 'transcribeAudio').mockResolvedValue({
+          text: transcriptionText,
+          language: 'en-US',
+          confidence: 0.88,
+        });
 
         await transcriptionService.processTranscription(recId);
       }
@@ -349,9 +337,7 @@ describe('Slack Voice/Recordings E2E', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      const slackRecordings = response.body.recordings.filter(
-        (rec: any) => rec.source === 'slack',
-      );
+      const slackRecordings = response.body.recordings.filter((rec: any) => rec.source === 'slack');
 
       expect(slackRecordings.length).toBeGreaterThan(0);
 
@@ -374,21 +360,15 @@ describe('Slack Voice/Recordings E2E', () => {
         },
       });
 
-      const slackTranscriptions = transcriptions.filter(
-        (t) => t.audioRecording.source === 'slack',
-      );
+      const slackTranscriptions = transcriptions.filter((t) => t.audioRecording.source === 'slack');
 
       expect(slackTranscriptions.length).toBeGreaterThan(0);
 
       // Verify content is searchable
-      const withStandup = slackTranscriptions.find((t) =>
-        t.content.includes('standup'),
-      );
+      const withStandup = slackTranscriptions.find((t) => t.content.includes('standup'));
 
       expect(withStandup).toBeDefined();
-      expect(withStandup?.audioRecording.meetingTitle).toBe(
-        mockSlackAudioFiles[0].title,
-      );
+      expect(withStandup?.audioRecording.meetingTitle).toBe(mockSlackAudioFiles[0].title);
     });
 
     it('should verify system stats include Slack recordings', async () => {
@@ -397,12 +377,8 @@ describe('Slack Voice/Recordings E2E', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      expect(response.body.recordings).toBeGreaterThanOrEqual(
-        mockSlackAudioFiles.length,
-      );
-      expect(response.body.transcriptions).toBeGreaterThanOrEqual(
-        mockSlackAudioFiles.length,
-      );
+      expect(response.body.recordings).toBeGreaterThanOrEqual(mockSlackAudioFiles.length);
+      expect(response.body.transcriptions).toBeGreaterThanOrEqual(mockSlackAudioFiles.length);
     });
 
     it('should differentiate between Teams and Slack recordings', async () => {
@@ -411,13 +387,9 @@ describe('Slack Voice/Recordings E2E', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      const slackRecordings = response.body.recordings.filter(
-        (rec: any) => rec.source === 'slack',
-      );
+      const slackRecordings = response.body.recordings.filter((rec: any) => rec.source === 'slack');
 
-      const teamsRecordings = response.body.recordings.filter(
-        (rec: any) => rec.source === 'teams',
-      );
+      const teamsRecordings = response.body.recordings.filter((rec: any) => rec.source === 'teams');
 
       // Should have Slack recordings
       expect(slackRecordings.length).toBeGreaterThan(0);
@@ -449,15 +421,11 @@ describe('Slack Voice/Recordings E2E', () => {
       expect(transcriptions.length).toBeGreaterThan(0);
 
       // Check first transcription has standup content
-      const standupTranscription = transcriptions.find((t) =>
-        t.content.includes('standup'),
-      );
+      const standupTranscription = transcriptions.find((t) => t.content.includes('standup'));
       expect(standupTranscription).toBeDefined();
 
       // Check second transcription has client meeting content
-      const clientMeetingTranscription = transcriptions.find((t) =>
-        t.content.includes('client'),
-      );
+      const clientMeetingTranscription = transcriptions.find((t) => t.content.includes('client'));
       expect(clientMeetingTranscription).toBeDefined();
     });
   });
@@ -482,25 +450,21 @@ describe('Slack Voice/Recordings E2E', () => {
         .mockRejectedValueOnce(new Error('Network timeout'));
 
       // Process transcription (will fail)
-      await expect(
-        transcriptionService.processTranscription(recordingId),
-      ).rejects.toThrow();
+      await expect(transcriptionService.processTranscription(recordingId)).rejects.toThrow();
 
       // Verify status is failed
-      let prisma = getPrismaClient();
+      const prisma = getPrismaClient();
       let recording = await prisma.audioRecording.findUnique({
         where: { id: recordingId },
       });
       expect(recording?.transcriptionStatus).toBe('failed');
 
       // Retry transcription (mock success)
-      jest
-        .spyOn(transcriptionService as any, 'transcribeAudio')
-        .mockResolvedValueOnce({
-          text: 'Retried Slack transcription text',
-          language: 'en-US',
-          confidence: 0.87,
-        });
+      jest.spyOn(transcriptionService as any, 'transcribeAudio').mockResolvedValueOnce({
+        text: 'Retried Slack transcription text',
+        language: 'en-US',
+        confidence: 0.87,
+      });
 
       const retryResponse = await request(app.getHttpServer())
         .post(`/transcription/recordings/${recordingId}/retry`)

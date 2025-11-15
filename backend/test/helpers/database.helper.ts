@@ -41,11 +41,7 @@ export async function cleanDatabase(): Promise<void> {
 /**
  * Create a test user
  */
-export async function createTestUser(data?: {
-  email?: string;
-  name?: string;
-  password?: string;
-}) {
+export async function createTestUser(data?: { email?: string; name?: string; password?: string }) {
   const prisma = getPrismaClient();
   const hashedPassword = await hash(data?.password || 'testpassword', 10);
 

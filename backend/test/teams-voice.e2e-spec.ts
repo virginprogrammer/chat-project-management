@@ -152,13 +152,11 @@ describe('Teams Voice/Recordings E2E', () => {
 
     it('should process transcription and store result', async () => {
       // Mock the transcribeAudio method to avoid calling Azure Speech
-      jest
-        .spyOn(transcriptionService as any, 'transcribeAudio')
-        .mockResolvedValue({
-          text: mockRecording001Transcription,
-          language: 'en-US',
-          confidence: 0.95,
-        });
+      jest.spyOn(transcriptionService as any, 'transcribeAudio').mockResolvedValue({
+        text: mockRecording001Transcription,
+        language: 'en-US',
+        confidence: 0.95,
+      });
 
       // Manually trigger transcription processing
       await transcriptionService.processTranscription(recordingId);
@@ -189,9 +187,7 @@ describe('Teams Voice/Recordings E2E', () => {
         .mockRejectedValue(new Error('Azure Speech API error'));
 
       // Attempt transcription
-      await expect(
-        transcriptionService.processTranscription(recordingId),
-      ).rejects.toThrow();
+      await expect(transcriptionService.processTranscription(recordingId)).rejects.toThrow();
 
       // Verify recording status is failed
       const prisma = getPrismaClient();
@@ -228,9 +224,7 @@ describe('Teams Voice/Recordings E2E', () => {
       expect(response.body.recordings).toBeDefined();
       expect(Array.isArray(response.body.recordings)).toBe(true);
 
-      const teamsRecordings = response.body.recordings.filter(
-        (rec: any) => rec.source === 'teams',
-      );
+      const teamsRecordings = response.body.recordings.filter((rec: any) => rec.source === 'teams');
 
       expect(teamsRecordings.length).toBe(mockTeamsRecordings.length);
     });
@@ -269,13 +263,11 @@ describe('Teams Voice/Recordings E2E', () => {
 
     it('should retrieve specific recording with transcription', async () => {
       // Mock and process transcription
-      jest
-        .spyOn(transcriptionService as any, 'transcribeAudio')
-        .mockResolvedValue({
-          text: mockRecording001Transcription,
-          language: 'en-US',
-          confidence: 0.95,
-        });
+      jest.spyOn(transcriptionService as any, 'transcribeAudio').mockResolvedValue({
+        text: mockRecording001Transcription,
+        language: 'en-US',
+        confidence: 0.95,
+      });
 
       await transcriptionService.processTranscription(recordingId);
 
@@ -310,17 +302,13 @@ describe('Teams Voice/Recordings E2E', () => {
 
         // Mock and process transcription
         const transcriptionText =
-          index === 0
-            ? mockRecording001Transcription
-            : 'Sprint review transcription text';
+          index === 0 ? mockRecording001Transcription : 'Sprint review transcription text';
 
-        jest
-          .spyOn(transcriptionService as any, 'transcribeAudio')
-          .mockResolvedValue({
-            text: transcriptionText,
-            language: 'en-US',
-            confidence: 0.9,
-          });
+        jest.spyOn(transcriptionService as any, 'transcribeAudio').mockResolvedValue({
+          text: transcriptionText,
+          language: 'en-US',
+          confidence: 0.9,
+        });
 
         await transcriptionService.processTranscription(recId);
       }
@@ -332,9 +320,7 @@ describe('Teams Voice/Recordings E2E', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      const teamsRecordings = response.body.recordings.filter(
-        (rec: any) => rec.source === 'teams',
-      );
+      const teamsRecordings = response.body.recordings.filter((rec: any) => rec.source === 'teams');
 
       expect(teamsRecordings.length).toBeGreaterThan(0);
 
@@ -357,21 +343,15 @@ describe('Teams Voice/Recordings E2E', () => {
         },
       });
 
-      const teamsTranscriptions = transcriptions.filter(
-        (t) => t.audioRecording.source === 'teams',
-      );
+      const teamsTranscriptions = transcriptions.filter((t) => t.audioRecording.source === 'teams');
 
       expect(teamsTranscriptions.length).toBeGreaterThan(0);
 
       // Verify content is searchable
-      const withProjectAlpha = teamsTranscriptions.find((t) =>
-        t.content.includes('Project Alpha'),
-      );
+      const withProjectAlpha = teamsTranscriptions.find((t) => t.content.includes('Project Alpha'));
 
       expect(withProjectAlpha).toBeDefined();
-      expect(withProjectAlpha?.audioRecording.meetingTitle).toBe(
-        mockTeamsMeetings[0].subject,
-      );
+      expect(withProjectAlpha?.audioRecording.meetingTitle).toBe(mockTeamsMeetings[0].subject);
     });
 
     it('should verify system stats include Teams recordings', async () => {
@@ -380,12 +360,8 @@ describe('Teams Voice/Recordings E2E', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .expect(200);
 
-      expect(response.body.recordings).toBeGreaterThanOrEqual(
-        mockTeamsRecordings.length,
-      );
-      expect(response.body.transcriptions).toBeGreaterThanOrEqual(
-        mockTeamsRecordings.length,
-      );
+      expect(response.body.recordings).toBeGreaterThanOrEqual(mockTeamsRecordings.length);
+      expect(response.body.transcriptions).toBeGreaterThanOrEqual(mockTeamsRecordings.length);
     });
 
     it('should allow retry of failed transcriptions', async () => {
@@ -408,25 +384,21 @@ describe('Teams Voice/Recordings E2E', () => {
         .mockRejectedValueOnce(new Error('Transcription failed'));
 
       // Process transcription (will fail)
-      await expect(
-        transcriptionService.processTranscription(recordingId),
-      ).rejects.toThrow();
+      await expect(transcriptionService.processTranscription(recordingId)).rejects.toThrow();
 
       // Verify status is failed
-      let prisma = getPrismaClient();
+      const prisma = getPrismaClient();
       let recording = await prisma.audioRecording.findUnique({
         where: { id: recordingId },
       });
       expect(recording?.transcriptionStatus).toBe('failed');
 
       // Retry transcription (mock success this time)
-      jest
-        .spyOn(transcriptionService as any, 'transcribeAudio')
-        .mockResolvedValueOnce({
-          text: 'Retried transcription text',
-          language: 'en-US',
-          confidence: 0.85,
-        });
+      jest.spyOn(transcriptionService as any, 'transcribeAudio').mockResolvedValueOnce({
+        text: 'Retried transcription text',
+        language: 'en-US',
+        confidence: 0.85,
+      });
 
       const retryResponse = await request(app.getHttpServer())
         .post(`/transcription/recordings/${recordingId}/retry`)

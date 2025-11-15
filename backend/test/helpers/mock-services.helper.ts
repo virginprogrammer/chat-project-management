@@ -14,14 +14,11 @@ export class MockTeamsAPI {
    * Mock channel messages endpoint
    */
   mockGetChannelMessages(teamId: string, channelId: string, messages: any[]) {
-    this.scope
-      .get(`/v1.0/teams/${teamId}/channels/${channelId}/messages`)
-      .query(true)
-      .reply(200, {
-        '@odata.context': 'https://graph.microsoft.com/v1.0/$metadata#Collection(chatMessage)',
-        '@odata.count': messages.length,
-        value: messages,
-      });
+    this.scope.get(`/v1.0/teams/${teamId}/channels/${channelId}/messages`).query(true).reply(200, {
+      '@odata.context': 'https://graph.microsoft.com/v1.0/$metadata#Collection(chatMessage)',
+      '@odata.count': messages.length,
+      value: messages,
+    });
 
     return this;
   }
@@ -30,11 +27,9 @@ export class MockTeamsAPI {
    * Mock teams list endpoint
    */
   mockGetTeams(teams: any[]) {
-    this.scope
-      .get('/v1.0/me/joinedTeams')
-      .reply(200, {
-        value: teams,
-      });
+    this.scope.get('/v1.0/me/joinedTeams').reply(200, {
+      value: teams,
+    });
 
     return this;
   }
@@ -43,11 +38,9 @@ export class MockTeamsAPI {
    * Mock channels list endpoint
    */
   mockGetChannels(teamId: string, channels: any[]) {
-    this.scope
-      .get(`/v1.0/teams/${teamId}/channels`)
-      .reply(200, {
-        value: channels,
-      });
+    this.scope.get(`/v1.0/teams/${teamId}/channels`).reply(200, {
+      value: channels,
+    });
 
     return this;
   }
@@ -57,12 +50,9 @@ export class MockTeamsAPI {
    */
   mockGetRecording(recordingUrl: string, audioBuffer: Buffer) {
     const url = new URL(recordingUrl);
-    nock(url.origin)
-      .get(url.pathname)
-      .query(true)
-      .reply(200, audioBuffer, {
-        'Content-Type': 'audio/mp4',
-      });
+    nock(url.origin).get(url.pathname).query(true).reply(200, audioBuffer, {
+      'Content-Type': 'audio/mp4',
+    });
 
     return this;
   }
@@ -71,12 +61,9 @@ export class MockTeamsAPI {
    * Mock call recordings list
    */
   mockGetCallRecordings(recordings: any[]) {
-    this.scope
-      .get('/v1.0/me/onlineMeetings')
-      .query(true)
-      .reply(200, {
-        value: recordings,
-      });
+    this.scope.get('/v1.0/me/onlineMeetings').query(true).reply(200, {
+      value: recordings,
+    });
 
     return this;
   }
@@ -119,13 +106,10 @@ export class MockSlackAPI {
    * Mock conversations.list endpoint
    */
   mockConversationsList(channels: any[]) {
-    this.scope
-      .get('/api/conversations.list')
-      .query(true)
-      .reply(200, {
-        ok: true,
-        channels,
-      });
+    this.scope.get('/api/conversations.list').query(true).reply(200, {
+      ok: true,
+      channels,
+    });
 
     return this;
   }
@@ -149,13 +133,10 @@ export class MockSlackAPI {
    * Mock files.list endpoint
    */
   mockFilesList(files: any[]) {
-    this.scope
-      .get('/api/files.list')
-      .query(true)
-      .reply(200, {
-        ok: true,
-        files,
-      });
+    this.scope.get('/api/files.list').query(true).reply(200, {
+      ok: true,
+      files,
+    });
 
     return this;
   }
@@ -165,12 +146,9 @@ export class MockSlackAPI {
    */
   mockFileDownload(downloadUrl: string, fileBuffer: Buffer) {
     const url = new URL(downloadUrl);
-    nock(url.origin)
-      .get(url.pathname)
-      .query(true)
-      .reply(200, fileBuffer, {
-        'Content-Type': 'audio/mpeg',
-      });
+    nock(url.origin).get(url.pathname).query(true).reply(200, fileBuffer, {
+      'Content-Type': 'audio/mpeg',
+    });
 
     return this;
   }
@@ -240,24 +218,22 @@ export class MockOpenAI {
    * Mock chat completions endpoint
    */
   mockChatCompletion(response: any) {
-    this.scope
-      .post('/v1/chat/completions')
-      .reply(200, {
-        id: 'chatcmpl-mock',
-        object: 'chat.completion',
-        created: Date.now(),
-        model: 'gpt-4',
-        choices: [
-          {
-            index: 0,
-            message: {
-              role: 'assistant',
-              content: JSON.stringify(response),
-            },
-            finish_reason: 'stop',
+    this.scope.post('/v1/chat/completions').reply(200, {
+      id: 'chatcmpl-mock',
+      object: 'chat.completion',
+      created: Date.now(),
+      model: 'gpt-4',
+      choices: [
+        {
+          index: 0,
+          message: {
+            role: 'assistant',
+            content: JSON.stringify(response),
           },
-        ],
-      });
+          finish_reason: 'stop',
+        },
+      ],
+    });
 
     return this;
   }
